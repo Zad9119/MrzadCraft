@@ -3,35 +3,43 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="Play minecraft 1.8.9 in your browser" />
-		<meta name="keywords" content="eaglercraft, eaglercraftx, minecraft, 1.21, 1.20" />
-		<title>Ravencraft 1.21</title>
+		<meta name="description" content="Eaglercraft 1.21.1 test directory HTML page" />
+		<meta name="keywords" content="eaglercraft, eaglercraftx, minecraft, 1.21.1" />
+		<title>Eaglercraft 1.21.1</title>
 		<meta property="og:locale" content="en-US" />
 		<meta property="og:type" content="website" />
-		<meta property="og:title" content="Ravencraft 1.21" />
-		<meta property="og:description" content="Play minecraft 1.21 in your browser" />
-		<meta property="og:image" content="favicon.png" />
+		<meta property="og:title" content="Eaglercraft 1.21.1" />
+		<meta property="og:description" content="test directory HTML page" />
 		<link type="image/png" rel="shortcut icon" href="favicon.png" />
 		<script type="text/javascript" src="classes.js"></script>
-		<script type="text/javascript" src="fix-webm-duration.js"></script>
 		<script type="text/javascript">
+			"use strict";
 			window.addEventListener("load", () => {
 				if(document.location.href.startsWith("file:")) {
-					alert("HTTP please, do not open this file locally, run a local HTTP server and load it via HTTP");
+					alert("Load This Via HTTP!");
 				}else {
-					window.eaglercraftXOpts = {
+					const relayId = Math.floor(Math.random() * 3);
+					window.eaglercraftOpts = {
 						container: "game_frame",
-						assetsURI: "assets.epk",
+						assetsURI: "assets/",
 						localesURI: "lang/",
-						servers: [
-							{ addr: "wss://sus.shhnowisnottheti.me", name: "Ayunboom" },
-							{ addr: "wss://aeon-network.net/1.8", name: "Aeon" },
-							{ addr: "wss://beta.vanillacraftsmp.org/", name: "VanillaCraft" },
-							{ addr: "wss://mc.sealcentral.co", name: "SealCraft" },
-							{ addr: "wss://g.deev.is/eaglerx-reference", name: "Reference Implementation" },
-							{ addr: "wss://play.craftclue.rocks", name: "CraftClue"}
+						worldsDB: "worlds",
+						logInvalidCerts: false,
+						servers:[],
+						relays: [
+							{ addr: "wss://relay.deev.is/", comment: "lax1dude relay #1", primary: relayId == 0 },
+							{ addr: "wss://relay.lax1dude.net/", comment: "lax1dude relay #2", primary: relayId == 1 },
+							{ addr: "wss://relay.shhnowisnottheti.me/", comment: "ayunami relay #1", primary: relayId == 2 }
 						]
 					};
+					
+					var q = window.location.search;
+					if(typeof q === "string" && q.startsWith("?")) {
+						q = new URLSearchParams(q);
+						var s = q.get("server");
+						if(s) window.eaglercraftOpts.joinServer = s;
+					}
+					
 					main();
 				}
 			});
